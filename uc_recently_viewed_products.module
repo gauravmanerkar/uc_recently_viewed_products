@@ -48,10 +48,10 @@ function uc_recently_viewed_products_init() {
         'nid' => arg(1),
         'sid' => isset($_COOKIE['uc_recently_viewed_products']) ? $_COOKIE['uc_recently_viewed_products'] : session_id(),
         'uid' => $user->uid,
-        ))->fields(array(
+      ))->fields(array(
           'ip' => ip_address(),
           'created' => REQUEST_TIME,
-       ))->execute();
+      ))->execute();
     }
   }
 }
@@ -76,7 +76,7 @@ function uc_recently_viewed_products_get() {
   $query->distinct();
   $query->fields('rp', array('nid'));
   if ($user->uid) {
-    $query->condition('rp.uid', $user->uid); 
+  $query->condition('rp.uid', $user->uid); 
   }
   else {
     $query->condition('rp.sid', $_COOKIE['uc_recently_viewed_products']);
@@ -86,7 +86,7 @@ function uc_recently_viewed_products_get() {
   $query->orderBy('rp.created', 'DESC'); 
   $query->range(0, $limit);
   $result = $query->execute()->fetchAll();
-    
+
   foreach ($result as $row) {
     $nids[] = $row;
   }
@@ -102,14 +102,14 @@ function uc_recently_viewed_products_block_info() {
     'info' => t('Ubercart Recently Viewed Products'),
     'cache' => DRUPAL_NO_CACHE,
   );
-  
+
   return $blocks;
 }
 
 /**
  * Implements hook_block_view().
  */
-function uc_recently_viewed_products_block_view($delta='') {
+function uc_recently_viewed_products_block_view($delta = '') {
   $block = array();
   switch ($delta) {
     case 'uc_recently_viewed_products':
@@ -125,11 +125,11 @@ function uc_recently_viewed_products_block_display() {
   if (!empty($nodeIds)) {
     foreach ($nodeIds as $nodeId) {
       $node = node_load($nodeId->nid);
-      if(!empty($node)) {
+      if (!empty($node)) {
         $node_view = node_view($node, 'teaser');
         $output .= drupal_render($node_view);
       }
-    } 
+    }
   }
   else {
     $output = 'No recently viewed products to display.';
@@ -139,13 +139,13 @@ function uc_recently_viewed_products_block_display() {
 }
 
 /**
- * Implement hook_cron().
+ * Implements hook_cron().
  */
 function uc_recently_viewed_products_cron() {
   $expireInterval = variable_get('uc_recently_viewed_products_expire_interval', UC_RECENTLY_VIEWED_PRODUCTS_EXPIRE_INTERVAL);
-  $expireTime = REQUEST_TIME -  (int) $expireInterval;
+  $expireTime = REQUEST_TIME - (int) $expireInterval;
 
   db_delete('uc_recently_viewed_products')
-    ->condition('created', $expireTime,'<')
+    ->condition('created', $expireTime, '<')
     ->execute();
 }
