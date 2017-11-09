@@ -96,7 +96,7 @@ function uc_recently_viewed_products_get()
     $query->range(0, $limit);
     $result = $query->execute()->fetchAll();
     
-    foreach ($result as $key => $row) {
+    foreach ($result as $row) {
         $nids[] = $row;
     }
     
@@ -140,8 +140,6 @@ function uc_recently_viewed_products_block_view($delta='') {
  */
 function uc_recently_viewed_products_block_display() {
   $output = '';
-
-  $productNids = array();
   $nodeIds     = uc_recently_viewed_products_get();
   if (!empty($nodeIds)) {
     foreach ($nodeIds as $nodeId) {
@@ -169,7 +167,8 @@ function uc_recently_viewed_products_cron()
 {
     $expireInterval = variable_get('uc_recently_viewed_products_expire_interval', UC_RECENTLY_VIEWED_PRODUCTS_EXPIRE_INTERVAL);
     $expireTime = REQUEST_TIME -  (int) $expireInterval;
-    db_query('DELETE FROM {uc_recently_viewed_products} WHERE created < (:expire_time)', array(
-        ':expire_time' => $expireTime
-    ));
+
+    db_delete('uc_recently_viewed_products')
+        ->condition('created', $expireTime,'<')
+        ->execute();
 }
