@@ -25,7 +25,7 @@ function uc_recently_viewed_products_schema() {
         'not null' => TRUE,
         'default' => 0,
         'description' => 'Drupal {node}.nid.',
-       ),
+      ),
       'uid' => array(
         'type' => 'int',
         'not null' => TRUE,
@@ -45,26 +45,20 @@ function uc_recently_viewed_products_schema() {
         'not null' => FALSE,
         'default' => NULL,
         'description' => 'IP Address of user',
-       ),
+      ),
       'created' => array(
         'type' => 'int',
         'not null' => TRUE,
         'default' => 0,
         'description' => 'Unix timestamp when created.',
-      ),     
-  ),
-  'primary key' => array(
-       'id',
-  ),
-  'indexes' => array(
-      'nid' => array(
-           'nid',
       ),
-      'uid' => array(
-          'uid',
-      ),
-  ),
- );
+    ),
+    'indexes' => array(
+      'nid' => array('nid'),
+      'uid' => array('uid'),
+    ),
+    'primary key' => array('id'),
+  );
   return $schema;
 }
 
