@@ -1,17 +1,15 @@
 <?php
 
-
 /**
  * @file
- * ubercart_recent_products installation routine. Creates uc_recently_viewed_products table.
+ * ubercart_recent_products installation routine. 
+ * Creates uc_recently_viewed_products table.
  */
-
 
 /**
  * Implementation of hook_schema().
  */
-function uc_recently_viewed_products_schema()
-{
+function uc_recently_viewed_products_schema(){
     $schema = array();
     
     $schema['uc_recently_viewed_products'] = array(
@@ -70,7 +68,6 @@ function uc_recently_viewed_products_schema()
     );
     return $schema;
 }
-
 
 /**
  * Implements hook_uninstall().
