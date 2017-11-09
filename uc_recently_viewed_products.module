@@ -107,44 +107,36 @@ function uc_recently_viewed_products_block_info() {
   return $blocks;
 }
 
-
 /**
  * Implements hook_block_view().
  */
 function uc_recently_viewed_products_block_view($delta='') {
   $block = array();
-  
-  switch($delta) {
-    case 'uc_recently_viewed_products' :
+  switch ($delta) {
+    case 'uc_recently_viewed_products':
       $block['content'] = uc_recently_viewed_products_block_display();
       break;
   }
-  
   return $block;
 }
 
-/**
- * Custom function to assemble renderable array for block content.
- * Returns a renderable array with the block content.
- * @return
- *   returns a renderable array of block content.
- */
+
 function uc_recently_viewed_products_block_display() {
   $output = '';
-  $nodeIds     = uc_recently_viewed_products_get();
+  $nodeIds = uc_recently_viewed_products_get();
   if (!empty($nodeIds)) {
     foreach ($nodeIds as $nodeId) {
        $node = node_load($nodeId->nid);
         if(!empty($node))
         {
-            $node_view = node_view($node, 'teaser');
-            $output .= drupal_render($node_view);
+          $node_view = node_view($node, 'teaser');
+          $output .= drupal_render($node_view);
         }
     } 
   }
   else
   {
-     $output = 'No recently viewed products to display.';
+    $output = 'No recently viewed products to display.';
   }
 
   return $output;
@@ -154,12 +146,11 @@ function uc_recently_viewed_products_block_display() {
 /**
  * Implement hook_cron().
  */
-function uc_recently_viewed_products_cron()
-{
-    $expireInterval = variable_get('uc_recently_viewed_products_expire_interval', UC_RECENTLY_VIEWED_PRODUCTS_EXPIRE_INTERVAL);
-    $expireTime = REQUEST_TIME -  (int) $expireInterval;
+function uc_recently_viewed_products_cron() {
+  $expireInterval = variable_get('uc_recently_viewed_products_expire_interval', UC_RECENTLY_VIEWED_PRODUCTS_EXPIRE_INTERVAL);
+  $expireTime = REQUEST_TIME -  (int) $expireInterval;
 
-    db_delete('uc_recently_viewed_products')
-        ->condition('created', $expireTime,'<')
-        ->execute();
+  db_delete('uc_recently_viewed_products')
+    ->condition('created', $expireTime,'<')
+    ->execute();
 }
