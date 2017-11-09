@@ -1,7 +1,6 @@
 /**
  * uc_recent_products: Recently viewed products module for Ubercart
  *
- *
  * Original credits, 1.x development:
  *
  * Developed by Gaurav Manerkar
@@ -9,30 +8,31 @@
 
 
 
-1. INSTALLATION
+INSTALLATION
 
-Download the latest release of this module 
+1) Download the latest release of this module .
 
-Uncompress the archive in your Ubercart contrib directory:
-[your Drupal root]/sites/all/modules/ubercart/contrib
+2) Uncompress the archive in your Ubercart contrib directory:
+[your Drupal root]/sites/all/modules.
 
-Enable the Ubercart Recently Viewed Products module under 'Ubercart - extra' in the
+3) Enable the Ubercart Recently Viewed Products module under 'Ubercart - extra' in the
 Drupal module administration page.
 
-Module configuration can be done from : admin/store/settings/recently-viewed-products
+4) Module configuration can be done from : admin/store/settings/recently-viewed-products.
 
-Go to admin/structure/block
+5) Go to admin/structure/block.
 
-Assign Ubercart Recently Viewed Products block to theme region
+6) Assign Ubercart Recently Viewed Products block to theme region.
 
 
-2. FEATURES
 
-This module provides users to see theirs recently viewes ubercart products.
+FEATURES
+
+This module provides users to see theirs recently viewed ubercart products.
 For anonymous users recently viewed products listing will get cleared once browsers session expires.
 
 
-3. DEVELOPMENT
+DEVELOPMENT
 
 The module introduces one new table:
 
