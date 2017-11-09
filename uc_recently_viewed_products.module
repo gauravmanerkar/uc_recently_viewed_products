@@ -173,4 +173,3 @@ function uc_recently_viewed_products_cron()
         ':expire_time' => $expireTime
     ));
 }
-?>

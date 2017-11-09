@@ -73,6 +73,3 @@ function uc_recently_viewed_products_uninstall() {
    variable_del('uc_recently_viewed_products_expire_interval');
    variable_del('uc_recently_viewed_products_limit');
 }
-
-
-?>

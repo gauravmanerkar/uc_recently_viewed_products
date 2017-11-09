@@ -33,5 +33,3 @@ function uc_recently_viewed_products_admin_settings_form($form, &$form_state) {
 
   return system_settings_form($form);
 }
-
-?>
