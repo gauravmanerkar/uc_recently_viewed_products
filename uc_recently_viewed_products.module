@@ -59,7 +59,7 @@ function uc_recently_viewed_products_init() {
 function uc_recently_viewed_products_session() {
   if (isset($_COOKIE['uc_recently_viewed_products']) && !empty($_COOKIE['uc_recently_viewed_products'])) {
     return TRUE;
-  } 
+  }
   else {
     $_SESSION['uc_recently_viewed_products'] = '';
     drupal_session_start();
@@ -70,7 +70,6 @@ function uc_recently_viewed_products_session() {
 function uc_recently_viewed_products_get() {
   global $user;
   $nids = array();
-    
   $limit = variable_get('uc_recently_viewed_products_limit', UC_RECENTLY_VIEWED_PRODUCTS_LIMIT);
   $query = db_select('uc_recently_viewed_products', 'rp');
   $query->innerJoin('node', 'n', 'n.nid = rp.nid');
@@ -78,7 +77,7 @@ function uc_recently_viewed_products_get() {
   $query->fields('rp', array('nid'));
   if ($user->uid) {
     $query->condition('rp.uid', $user->uid); 
-  } 
+  }
   else {
     $query->condition('rp.sid', $_COOKIE['uc_recently_viewed_products']);
     $query->condition('rp.uid', 0);
@@ -120,28 +119,24 @@ function uc_recently_viewed_products_block_view($delta='') {
   return $block;
 }
 
-
 function uc_recently_viewed_products_block_display() {
   $output = '';
   $nodeIds = uc_recently_viewed_products_get();
   if (!empty($nodeIds)) {
     foreach ($nodeIds as $nodeId) {
-       $node = node_load($nodeId->nid);
-        if(!empty($node))
-        {
-          $node_view = node_view($node, 'teaser');
-          $output .= drupal_render($node_view);
-        }
+      $node = node_load($nodeId->nid);
+      if(!empty($node)) {
+        $node_view = node_view($node, 'teaser');
+        $output .= drupal_render($node_view);
+      }
     } 
   }
-  else
-  {
+  else {
     $output = 'No recently viewed products to display.';
   }
 
   return $output;
 }
-
 
 /**
  * Implement hook_cron().
