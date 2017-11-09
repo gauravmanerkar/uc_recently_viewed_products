@@ -29,43 +29,43 @@ function uc_recently_viewed_products_menu() {
 }
 
 /**
- * Implementation of hook_init().
+ * Implements hook_init().
  */
 function uc_recently_viewed_products_init() {
-    global $user;
+  global $user;
 
-    $session = uc_recently_viewed_products_session();
-    if (!$session) {
-        $session_id    = drupal_hash_base64(uniqid(mt_rand(), TRUE));
-        $cookie_domain = ini_get('session.cookie_domain');
-        setcookie('uc_recently_viewed_products', $session_id, REQUEST_TIME + 2592000, '/', $cookie_domain);
-    }
+  $session = uc_recently_viewed_products_session();
+  if (!$session) {
+    $session_id    = drupal_hash_base64(uniqid(mt_rand(), TRUE));
+    $cookie_domain = ini_get('session.cookie_domain');
+    setcookie('uc_recently_viewed_products', $session_id, REQUEST_TIME + 2592000, '/', $cookie_domain);
+  }
 
-    if (arg(0) == 'node' && is_numeric(arg(1)) && arg(2) == NULL) {
-        $node = menu_get_object();
-        if ($node->type == 'product') {
-            db_merge('uc_recently_viewed_products')->key(array(
-                'nid' => arg(1),
-                'sid' => isset($_COOKIE['uc_recently_viewed_products']) ? $_COOKIE['uc_recently_viewed_products'] : session_id(),
-                'uid' => $user->uid
-            ))->fields(array(
-                'ip' => ip_address(),
-                'created' => REQUEST_TIME
-            ))->execute();
-        }
+  if (arg(0) == 'node' && is_numeric(arg(1)) && arg(2) == NULL) {
+    $node = menu_get_object();
+    if ($node->type == 'product') {
+      db_merge('uc_recently_viewed_products')->key(array(
+        'nid' => arg(1),
+        'sid' => isset($_COOKIE['uc_recently_viewed_products']) ? $_COOKIE['uc_recently_viewed_products'] : session_id(),
+        'uid' => $user->uid
+        ))->fields(array(
+          'ip' => ip_address(),
+          'created' => REQUEST_TIME
+       ))->execute();
     }
+  }
 }
 
 
 function uc_recently_viewed_products_session()
 {
-    if (isset($_COOKIE['uc_recently_viewed_products']) && !empty($_COOKIE['uc_recently_viewed_products'])) {
-        return true;
-    } else {
-        $_SESSION['uc_recently_viewed_products'] = '';
-        drupal_session_start();
-        return false;
-    }
+  if (isset($_COOKIE['uc_recently_viewed_products']) && !empty($_COOKIE['uc_recently_viewed_products'])) {
+    return true;
+  } else {
+    $_SESSION['uc_recently_viewed_products'] = '';
+    drupal_session_start();
+    return false;
+  } 
 }
 
 
