@@ -47,56 +47,51 @@ function uc_recently_viewed_products_init() {
       db_merge('uc_recently_viewed_products')->key(array(
         'nid' => arg(1),
         'sid' => isset($_COOKIE['uc_recently_viewed_products']) ? $_COOKIE['uc_recently_viewed_products'] : session_id(),
-        'uid' => $user->uid
+        'uid' => $user->uid,
         ))->fields(array(
           'ip' => ip_address(),
-          'created' => REQUEST_TIME
+          'created' => REQUEST_TIME,
        ))->execute();
     }
   }
 }
 
-
-function uc_recently_viewed_products_session()
-{
+function uc_recently_viewed_products_session() {
   if (isset($_COOKIE['uc_recently_viewed_products']) && !empty($_COOKIE['uc_recently_viewed_products'])) {
-    return true;
-  } else {
+    return TRUE;
+  } 
+  else {
     $_SESSION['uc_recently_viewed_products'] = '';
     drupal_session_start();
-    return false;
-  } 
+    return FALSE;
+  }
 }
 
-
-function uc_recently_viewed_products_get()
-{
-    global $user;
-    $nids = array();
+function uc_recently_viewed_products_get() {
+  global $user;
+  $nids = array();
     
-    $limit = variable_get('uc_recently_viewed_products_limit', UC_RECENTLY_VIEWED_PRODUCTS_LIMIT);
-    $query = db_select('uc_recently_viewed_products', 'rp');
-    $query->innerJoin('node', 'n', 'n.nid = rp.nid');
-    $query->distinct();
-    $query->fields('rp', array(
-        'nid'
-    ));
-    if ($user->uid) {
-        $query->condition('rp.uid', $user->uid); 
-    } else {
-        $query->condition('rp.sid', $_COOKIE['uc_recently_viewed_products']);
-        $query->condition('rp.uid', 0);
-    }
-    $query->condition('n.status', 1);
-    $query->orderBy('rp.created', 'DESC'); 
-    $query->range(0, $limit);
-    $result = $query->execute()->fetchAll();
+  $limit = variable_get('uc_recently_viewed_products_limit', UC_RECENTLY_VIEWED_PRODUCTS_LIMIT);
+  $query = db_select('uc_recently_viewed_products', 'rp');
+  $query->innerJoin('node', 'n', 'n.nid = rp.nid');
+  $query->distinct();
+  $query->fields('rp', array('nid'));
+  if ($user->uid) {
+    $query->condition('rp.uid', $user->uid); 
+  } 
+  else {
+    $query->condition('rp.sid', $_COOKIE['uc_recently_viewed_products']);
+    $query->condition('rp.uid', 0);
+  }
+  $query->condition('n.status', 1);
+  $query->orderBy('rp.created', 'DESC'); 
+  $query->range(0, $limit);
+  $result = $query->execute()->fetchAll();
     
-    foreach ($result as $row) {
-        $nids[] = $row;
-    }
-    
-    return $nids;
+  foreach ($result as $row) {
+    $nids[] = $row;
+  }
+  return $nids;
 }
 
 /**
