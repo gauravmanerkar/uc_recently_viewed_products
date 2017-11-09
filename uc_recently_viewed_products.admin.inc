@@ -14,7 +14,7 @@ function uc_recently_viewed_products_admin_settings_form($form, &$form_state) {
   $form['uc_recently_viewed_products_expire_interval'] = array(
     '#type' => 'textfield',
     '#attributes' => array(
-        ' type' => 'number',
+      ' type' => 'number',
     ),
     '#title' => t('Products Expire time'),
     '#default_value' => variable_get('uc_recently_viewed_products_expire_interval', 86400),
@@ -24,7 +24,7 @@ function uc_recently_viewed_products_admin_settings_form($form, &$form_state) {
   $form['uc_recently_viewed_products_limit'] = array(
     '#type' => 'textfield',
     '#attributes' => array(
-        ' type' => 'number',
+      ' type' => 'number',
     ),
     '#title' => t('Number of products to show'),
     '#default_value' => variable_get('uc_recently_viewed_products_limit', 4),
