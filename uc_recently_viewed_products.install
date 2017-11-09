@@ -3,7 +3,6 @@
 /**
  * @file
  * ubercart_recent_products installation routine.
- * creates uc_recently_viewed_products table.
  */
 
 /**
@@ -44,7 +43,7 @@ function uc_recently_viewed_products_schema() {
               'type' => 'varchar',
               'length' => 255,
               'not null' => FALSE,
-              'default' => null,
+              'default' => NULL,
               'description' => 'IP Address of user',
             ),
             'created' => array(
@@ -66,7 +65,7 @@ function uc_recently_viewed_products_schema() {
             )
         )
   );
-    return $schema;
+  return $schema;
 }
 
 /**
