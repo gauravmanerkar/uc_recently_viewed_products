@@ -56,6 +56,9 @@ function uc_recently_viewed_products_init() {
   }
 }
 
+/**
+ * Check if cookie variable is set.
+ */
 function uc_recently_viewed_products_session() {
   if (isset($_COOKIE['uc_recently_viewed_products']) && !empty($_COOKIE['uc_recently_viewed_products'])) {
     return TRUE;
@@ -67,6 +70,9 @@ function uc_recently_viewed_products_session() {
   }
 }
 
+/**
+ * Get recently viewed products based on user from database.
+ */
 function uc_recently_viewed_products_get() {
   global $user;
   $nids = array();
@@ -76,7 +82,7 @@ function uc_recently_viewed_products_get() {
   $query->distinct();
   $query->fields('rp', array('nid'));
   if ($user->uid) {
-  $query->condition('rp.uid', $user->uid);
+    $query->condition('rp.uid', $user->uid);
   }
   else {
     $query->condition('rp.sid', $_COOKIE['uc_recently_viewed_products']);
@@ -119,6 +125,9 @@ function uc_recently_viewed_products_block_view($delta = '') {
   return $block;
 }
 
+/**
+ * Output block view.
+ */
 function uc_recently_viewed_products_block_display() {
   $output = '';
   $nodeIds = uc_recently_viewed_products_get();
