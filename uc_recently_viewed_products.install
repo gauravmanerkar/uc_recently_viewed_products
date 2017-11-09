@@ -2,56 +2,56 @@
 
 /**
  * @file
- * ubercart_recent_products installation routine. 
- * Creates uc_recently_viewed_products table.
+ * ubercart_recent_products installation routine.
+ * creates uc_recently_viewed_products table.
  */
 
 /**
- * Implementation of hook_schema().
+ * Implements hook_schema().
  */
-function uc_recently_viewed_products_schema(){
-    $schema = array();
-    
-    $schema['uc_recently_viewed_products'] = array(
+function uc_recently_viewed_products_schema() {
+  $schema = array();
+
+  $schema['uc_recently_viewed_products'] = array(
         'description' => 'Ubercart Recent Products',
         'fields' => array(
             'id' => array(
                 'description' => 'The primary identifier.',
                 'type' => 'serial',
                 'unsigned' => TRUE,
-                'not null' => TRUE
+                'not null' => TRUE,
             ),
             'nid' => array(
                 'type' => 'int',
                 'not null' => TRUE,
                 'default' => 0,
-                'description' => 'Drupal {node}.nid.'
+                'description' => 'Drupal {node}.nid.',
             ),
             'uid' => array(
                 'type' => 'int',
                 'not null' => TRUE,
                 'default' => 0,
-                'description' => 'Drupal {users}.uid.'
+                'description' => 'Drupal {users}.uid.',
             ),
             'sid' => array(
                 'type' => 'varchar',
                 'length' => 128,
                 'not null' => TRUE,
                 'default' => '',
-                'description' => 'Browser session ID of user that visited page.'
+                'description' => 'Browser session ID of user that visited page.',
             ),
             'ip' => array(
                 'type' => 'varchar',
                 'length' => 255,
                 'not null' => FALSE,
                 'default' => null,
-                'description' => 'IP Address of user'
+                'description' => 'IP Address of user',
             ),
             'created' => array(
                 'type' => 'int',
                 'not null' => TRUE,
                 'default' => 0,
-                'description' => 'Unix timestamp when created.'
+                'description' => 'Unix timestamp when created.',
             )
         ),
         'primary key' => array(
