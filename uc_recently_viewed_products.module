@@ -7,10 +7,8 @@
  * Original development by Gaurav Manerkar .
  */
 
-
-define('UC_RECENTLY_VIEWED_PRODUCTS_EXPIRE_INTERVAL',86400);
+define('UC_RECENTLY_VIEWED_PRODUCTS_EXPIRE_INTERVAL', 86400);
 define('UC_RECENTLY_VIEWED_PRODUCTS_LIMIT', 4);
-
 
 /**
  * Implements hook_menu().
@@ -30,12 +28,10 @@ function uc_recently_viewed_products_menu() {
   return $items;
 }
 
-
 /**
  * Implementation of hook_init().
  */
-function uc_recently_viewed_products_init()
-{
+function uc_recently_viewed_products_init() {
     global $user;
 
     $session = uc_recently_viewed_products_session();
