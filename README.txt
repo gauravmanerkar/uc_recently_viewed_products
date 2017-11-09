@@ -1,0 +1,1 @@
+Ubercart Recently Viewed Products
