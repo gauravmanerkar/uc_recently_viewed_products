@@ -1,11 +1,6 @@
 <?php
 
 /**
- * @file
- * ubercart_recent_products installation routine.
- */
-
-/**
  * Implements hook_schema().
  */
 function uc_recently_viewed_products_schema() {
@@ -51,19 +46,19 @@ function uc_recently_viewed_products_schema() {
               'not null' => TRUE,
               'default' => 0,
               'description' => 'Unix timestamp when created.',
-            )
+            ),
         ),
         'primary key' => array(
-            'id'
+            'id',
         ),
         'indexes' => array(
             'nid' => array(
-                'nid'
+                'nid',
             ),
             'uid' => array(
-                'uid'
-            )
-        )
+                'uid',
+            ),
+        ),
   );
   return $schema;
 }
