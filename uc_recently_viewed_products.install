@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Ubercart_recent_products installation routine.
+ */
+
+/**
  * Implements hook_schema().
  */
 function uc_recently_viewed_products_schema() {
