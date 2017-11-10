@@ -15,10 +15,11 @@ INSTALLATION
 2) Uncompress the archive in your Ubercart contrib directory:
 [your Drupal root]/sites/all/modules.
 
-3) Enable the Ubercart Recently Viewed Products module under 'Ubercart - extra' in the
-Drupal module administration page.
+3) Enable the Ubercart Recently Viewed Products module under 
+'Ubercart - extra' in the Drupal module administration page.
 
-4) Module configuration can be done from : admin/store/settings/recently-viewed-products.
+4) Module configuration can be done from 
+admin/store/settings/recently-viewed-products.
 
 5) Go to admin/structure/block.
 
@@ -28,8 +29,9 @@ Drupal module administration page.
 
 FEATURES
 
-This module provides users to see theirs recently viewed ubercart products.
-For anonymous users recently viewed products listing will get cleared once browsers session expires.
+1)This module provides users to see theirs recently viewed ubercart products.
+2) For anonymous users recently viewed products listing 
+will get cleared once browsers session expires.
 
 
 DEVELOPMENT
