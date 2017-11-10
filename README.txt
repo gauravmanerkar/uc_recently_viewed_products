@@ -42,7 +42,3 @@ uid (int) -- user id
 sid (int) -- session id 
 ip (text) -- users ip address
 created (int) -- timestamp when product is viewed
-
-
-
-
