@@ -38,7 +38,7 @@ function uc_recently_viewed_products_init() {
   if (!$session) {
     $session_id    = drupal_hash_base64(uniqid(mt_rand(), TRUE));
     $cookie_domain = ini_get('session.cookie_domain');
-    setcookie('uc_recently_viewed_products', $session_id, REQUEST_TIME + 2592000, '/', $cookie_domain);
+    setcookie('uc_recently_viewed_products', $session_id, REQUEST_TIME + 2592000, '/', $cookie_domain, 1, 1);
   }
 
   if (arg(0) == 'node' && is_numeric(arg(1)) && arg(2) == NULL) {
