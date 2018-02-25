@@ -1,4 +1,4 @@
--- SUMMARY --
+-- NTRODUCTION --
 
 This module provides users to see theirs recently viewed ubercart products
 
