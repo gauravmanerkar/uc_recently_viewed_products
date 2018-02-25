@@ -16,9 +16,7 @@ This module provides users to see theirs recently viewed ubercart products
 
 -- INSTALLATION --
 
-* Install as usual, see http://drupal.org/node/1897420 for further information.
-
-* Download the latest release of this module .
+* Download the latest release of this module.
 
 * Uncompress the archive in your Ubercart contrib directory:
 [your Drupal root]/sites/all/modules.
