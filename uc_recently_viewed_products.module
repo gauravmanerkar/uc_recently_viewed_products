@@ -85,7 +85,7 @@ function uc_recently_viewed_products_get() {
     $query->condition('rp.uid', $user->uid);
   }
   else {
-    if(isset($_COOKIE['uc_recently_viewed_products'])) {
+    if (isset($_COOKIE['uc_recently_viewed_products'])) {
       $query->condition('rp.sid', $_COOKIE['uc_recently_viewed_products']);
     }
     $query->condition('rp.uid', 0);
