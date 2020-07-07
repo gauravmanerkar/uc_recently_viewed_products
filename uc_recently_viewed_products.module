@@ -1,0 +1,200 @@
+<?php
+
+/**
+ * @file
+ * Allows users to see recently viewed products.
+ *
+ * Original development by Gaurav Manerkar .
+ */
+
+define('UC_RECENTLY_VIEWED_PRODUCTS_EXPIRE_INTERVAL', 86400);
+define('UC_RECENTLY_VIEWED_PRODUCTS_LIMIT', 4);
+
+/**
+ * Implements hook_menu().
+ */
+function uc_recently_viewed_products_menu() {
+  $items = array();
+
+  $items['admin/store/settings/recently-viewed-products'] = array(
+    'title' => 'Recently viewed products settings',
+    'description' => 'Configure the recently viewed products settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('uc_recently_viewed_products_admin_settings_form'),
+    'access arguments' => array('administer'),
+    'file' => 'uc_recently_viewed_products.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_init().
+ */
+function uc_recently_viewed_products_init() {
+  global $user;
+
+  $session = uc_recently_viewed_products_session();
+  if (!$session) {
+    $session_id    = drupal_hash_base64(uniqid(mt_rand(), TRUE));
+    $cookie_domain = ini_get('session.cookie_domain');
+    setcookie('uc_recently_viewed_products', $session_id, REQUEST_TIME + 2592000, '/', $cookie_domain, 1, 1);
+  }
+
+  if (arg(0) == 'node' && is_numeric(arg(1)) && arg(2) == NULL) {
+    $node = menu_get_object();
+    if ($node->type == 'product') {
+      db_merge('uc_recently_viewed_products')->key(array(
+        'nid' => arg(1),
+        'sid' => isset($_COOKIE['uc_recently_viewed_products']) ? $_COOKIE['uc_recently_viewed_products'] : session_id(),
+        'uid' => $user->uid,
+      ))->fields(array(
+        'ip' => ip_address(),
+        'created' => REQUEST_TIME,
+      ))->execute();
+    }
+  }
+}
+
+/**
+ * Check if cookie variable is set.
+ */
+function uc_recently_viewed_products_session() {
+  if (isset($_COOKIE['uc_recently_viewed_products']) && !empty($_COOKIE['uc_recently_viewed_products'])) {
+    return TRUE;
+  }
+  else {
+    $_SESSION['uc_recently_viewed_products'] = '';
+    drupal_session_start();
+    return FALSE;
+  }
+}
+
+/**
+ * Get recently viewed products based on user from database.
+ */
+function uc_recently_viewed_products_get() {
+  global $user;
+  $nids = array();
+  $limit = variable_get('uc_recently_viewed_products_limit', UC_RECENTLY_VIEWED_PRODUCTS_LIMIT);
+  $query = db_select('uc_recently_viewed_products', 'rp');
+  $query->innerJoin('node', 'n', 'n.nid = rp.nid');
+  $query->distinct();
+  $query->fields('rp', array('nid'));
+  if ($user->uid) {
+    $query->condition('rp.uid', $user->uid);
+  }
+  else {
+    if (isset($_COOKIE['uc_recently_viewed_products'])) {
+      $query->condition('rp.sid', $_COOKIE['uc_recently_viewed_products']);
+    }
+    $query->condition('rp.uid', 0);
+  }
+  $query->condition('n.status', 1);
+  $query->orderBy('rp.created', 'DESC');
+  $query->range(0, $limit);
+  $result = $query->execute()->fetchAll();
+
+  foreach ($result as $row) {
+    $nids[] = $row;
+  }
+  return $nids;
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function uc_recently_viewed_products_block_info() {
+  $blocks = array();
+  $blocks['uc_recently_viewed_products'] = array(
+    'info' => t('Ubercart Recently Viewed Products'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function uc_recently_viewed_products_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'uc_recently_viewed_products':
+      $block['content'] = uc_recently_viewed_products_block_display();
+      break;
+  }
+  return $block;
+}
+
+/**
+ * Output block view.
+ */
+function uc_recently_viewed_products_block_display() {
+  $output = '';
+  $nodeIds = uc_recently_viewed_products_get();
+  if (!empty($nodeIds)) {
+    foreach ($nodeIds as $nodeId) {
+      $node = node_load($nodeId->nid);
+      if (!empty($node)) {
+        $node_view = node_view($node, 'teaser');
+        $output .= drupal_render($node_view);
+      }
+    }
+  }
+  else {
+    $output = 'No recently viewed products to display.';
+  }
+
+  return $output;
+}
+
+/**
+ * Implements hook_cron().
+ */
+function uc_recently_viewed_products_cron() {
+  $expireInterval = variable_get('uc_recently_viewed_products_expire_interval', UC_RECENTLY_VIEWED_PRODUCTS_EXPIRE_INTERVAL);
+  $expireTime = REQUEST_TIME - (int) $expireInterval;
+
+  db_delete('uc_recently_viewed_products')
+    ->condition('created', $expireTime, '<')
+    ->execute();
+}
+
+/**
+ * Implements hook_help().
+ */
+function uc_recently_viewed_products_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#uc_recently_viewed_products':
+
+      $filepath = dirname(__FILE__) . '/README.md';
+      if (file_exists($filepath)) {
+        $readme = file_get_contents($filepath);
+      }
+      else {
+        $filepath = dirname(__FILE__) . '/README.txt';
+        if (file_exists($filepath)) {
+          $readme = file_get_contents($filepath);
+        }
+      }
+      if (!isset($readme)) {
+        return NULL;
+      }
+      if (module_exists('markdown')) {
+        $filters = module_invoke('markdown', 'filter_info');
+        $info = $filters['filter_markdown'];
+        if (function_exists($info['process callback'])) {
+          $output = $info['process callback']($readme, NULL);
+        }
+        else {
+          $output = '<pre>' . $readme . '</pre>';
+        }
+      }
+      else {
+        $output = '<pre>' . $readme . '</pre>';
+      }
+
+      return $output;
+  }
+}

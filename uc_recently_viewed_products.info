@@ -1,0 +1,10 @@
+name = Ubercart Recently Viewed Products
+description = "Display recently viewed products."
+configure = admin/store/settings/recently-viewed-products
+
+dependencies[] = uc_cart
+dependencies[] = uc_store
+dependencies[] = uc_order
+dependencies[] = uc_product
+package = "Ubercart - extra"
+core = 7.x

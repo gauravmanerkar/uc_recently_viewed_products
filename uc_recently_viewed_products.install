@@ -1,0 +1,72 @@
+<?php
+
+/**
+ * @file
+ * Ubercart_recent_products installation routine.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function uc_recently_viewed_products_schema() {
+  $schema = array();
+
+  $schema['uc_recently_viewed_products'] = array(
+    'description' => 'Ubercart Recent Products',
+    'fields' => array(
+      'id' => array(
+        'description' => 'The primary identifier.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'nid' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Drupal {node}.nid.',
+      ),
+      'uid' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Drupal {users}.uid.',
+      ),
+      'sid' => array(
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Browser session ID of user that visited page.',
+      ),
+      'ip' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'default' => NULL,
+        'description' => 'IP Address of user',
+      ),
+      'created' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Unix timestamp when created.',
+      ),
+    ),
+    'indexes' => array(
+      'nid' => array('nid'),
+      'uid' => array('uid'),
+    ),
+    'primary key' => array('id'),
+  );
+  return $schema;
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function uc_recently_viewed_products_uninstall() {
+  drupal_uninstall_schema('uc_recently_viewed_products');
+  variable_del('uc_recently_viewed_products_expire_interval');
+  variable_del('uc_recently_viewed_products_limit');
+}
